@@ -1,0 +1,8 @@
+{
+  // VS Code offers to install these when you open the folder.
+  "recommendations": [
+    "vscjava.vscode-java-pack",        // run and debug the Java lesson programs (java-lab)
+    "ms-azuretools.vscode-docker",     // start/stop the lab server and see its logs
+    "ms-python.python"                 // the end-to-end browser test (tests/e2e.py)
+  ]
+}

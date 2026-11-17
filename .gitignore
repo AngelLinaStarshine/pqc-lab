@@ -1,0 +1,5 @@
+.env
+node_modules/
+tests/shots_e2e/
+target/
+*.class

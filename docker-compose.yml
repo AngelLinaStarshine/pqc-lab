@@ -1,0 +1,57 @@
+# PQC Lab pilot stack: web app + PostgreSQL + Java sandbox.
+# Put a TLS reverse proxy (Caddy, nginx, or the host's load balancer) in front of port 8080.
+services:
+  db:
+    image: public.ecr.aws/docker/library/postgres:16-alpine@sha256:0cefaabd882e42bcb2a2f3dc56d3ce4770560ba62fd7f197f1a2e008fd5731ab
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: pqclab
+      POSTGRES_USER: pqclab
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?set DB_PASSWORD in .env}
+    volumes: [pgdata:/var/lib/postgresql/data]
+    networks: [backend]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pqclab -d pqclab"]
+      interval: 5s
+      retries: 20
+
+  runner:
+    build: ./runner
+    restart: unless-stopped
+    networks: [sandbox]            # internal only: no route to the internet or to the database
+    read_only: true
+    tmpfs: ["/tmp:rw,size=256m,mode=1777,exec"]
+    cap_drop: [ALL]
+    cap_add: [SETUID, SETGID, CHOWN, KILL, DAC_OVERRIDE, FOWNER]
+    security_opt: ["no-new-privileges:true"]
+    environment:
+      WORKERS: ${RUNNER_WORKERS:-2}   # parallel Java jobs; give each about 1 CPU and 400 MB (see README, "Class size")
+    pids_limit: ${RUNNER_PIDS:-256}
+    mem_limit: ${RUNNER_MEM:-1g}
+    cpus: ${RUNNER_CPUS:-2.0}
+
+  app:
+    build: ./app
+    restart: unless-stopped
+    depends_on:
+      db: {condition: service_healthy}
+      runner: {condition: service_started}
+    environment:
+      DATABASE_URL: postgres://pqclab:${DB_PASSWORD}@db:5432/pqclab
+      SESSION_SECRET: ${SESSION_SECRET:?set SESSION_SECRET in .env}
+      RUNNER_URL: http://runner:8090
+      COOKIE_SECURE: ${COOKIE_SECURE:-true}
+      TRUST_PROXY: ${TRUST_PROXY:-loopback, uniquelocal}
+    ports: ["${BIND_ADDR:-127.0.0.1}:8080:8080"]
+    networks: [frontend, backend, sandbox]
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+
+networks:
+  frontend: {}
+  backend: {internal: true}
+  sandbox: {internal: true}
+
+volumes:
+  pgdata: {}

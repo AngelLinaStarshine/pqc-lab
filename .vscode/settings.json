@@ -1,0 +1,9 @@
+{
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "java.compile.nullAnalysis.mode": "disabled",
+  "files.exclude": { "**/node_modules": true, "**/target": true, "tests/shots_e2e": true },
+  "search.exclude": { "**/node_modules": true, "tests/keys.json": true },
+  "editor.tabSize": 2,
+  "[java]": { "editor.tabSize": 4 },
+  "files.associations": { ".env.example": "properties" }
+}

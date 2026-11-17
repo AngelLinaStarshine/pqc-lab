@@ -1,0 +1,12 @@
+{
+  // Run ▷ (Ctrl+Shift+D): the reference programs from Lessons 2–4, on Java 21 + Bouncy Castle 1.79.
+  "version": "0.2.0",
+  "configurations": [
+    { "type": "java", "name": "Lesson 2 · KemCheck",                  "request": "launch", "mainClass": "KemCheck",     "projectName": "java-lab" },
+    { "type": "java", "name": "Lesson 2 · RoundTrip (the Learn example)", "request": "launch", "mainClass": "RoundTrip",    "projectName": "java-lab" },
+    { "type": "java", "name": "Lesson 3 · ParamAudit",                "request": "launch", "mainClass": "ParamAudit",   "projectName": "java-lab" },
+    { "type": "java", "name": "Lesson 3 · ParamAudit with policy 5 (must fail, exit 2)", "request": "launch", "mainClass": "ParamAudit", "projectName": "java-lab", "args": "5" },
+    { "type": "java", "name": "Lesson 4 · GuardHarness (provenance guard)", "request": "launch", "mainClass": "GuardHarness", "projectName": "java-lab" },
+    { "type": "java", "name": "Lesson 4 · PinnedKem",                 "request": "launch", "mainClass": "PinnedKem",    "projectName": "java-lab" }
+  ]
+}

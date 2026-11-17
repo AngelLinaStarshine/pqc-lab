@@ -1,0 +1,28 @@
+{
+  // Terminal ▸ Run Task… (or Ctrl+Shift+P → "Tasks: Run Task")
+  "version": "2.0.0",
+  "tasks": [
+    { "label": "Lab server: start (Docker)",  "type": "shell", "command": "docker compose up -d --build", "problemMatcher": [] },
+    { "label": "Lab server: stop",            "type": "shell", "command": "docker compose down", "problemMatcher": [] },
+    { "label": "Lab server: show logs",       "type": "shell", "command": "docker compose logs -f app runner", "isBackground": true, "problemMatcher": [] },
+    { "label": "Lab server: create teacher account", "type": "shell",
+      "command": "docker compose exec app node scripts/create-teacher.js \"${input:className}\" ${input:teacherEmail}", "problemMatcher": [] },
+    { "label": "Lab server: withdraw a participant", "type": "shell",
+      "command": "docker compose exec app node scripts/withdraw.js ${input:pseudonym} --confirm", "problemMatcher": [] },
+    { "label": "Tests: lesson content + relevance + checkpoints (quick, no server)", "type": "shell",
+      "command": "node tests/content-bundle.js && node tests/relevance.js && node tests/checkpoints.js", "group": "test", "problemMatcher": [] },
+    { "label": "Tests: end-to-end in a browser (TEST STACK ONLY, deletes student data)", "type": "shell",
+      "command": "python3 tests/e2e.py", "windows": { "command": "python tests/e2e.py" }, "options": { "env": { "PQC_TEST_STACK": "1" } }, "group": "test", "problemMatcher": [] },
+    { "label": "Tests: class-size load (30 students, 15 Java runs)", "type": "shell", "command": "node tests/load.js 30 15", "group": "test", "problemMatcher": [] },
+    { "label": "Java: run all lesson programs (Maven)", "type": "shell",
+      "command": "mvn -q compile exec:java -Dexec.mainClass=KemCheck && mvn -q exec:java -Dexec.mainClass=ParamAudit && mvn -q exec:java -Dexec.mainClass=GuardHarness && mvn -q exec:java -Dexec.mainClass=PinnedKem",
+      "options": { "cwd": "${workspaceFolder}/java-lab" }, "problemMatcher": [] },
+    { "label": "Prototype: open in the browser", "type": "shell",
+      "windows": { "command": "start prototype/pqc-lab.html" }, "osx": { "command": "open prototype/pqc-lab.html" }, "linux": { "command": "xdg-open prototype/pqc-lab.html" }, "problemMatcher": [] }
+  ],
+  "inputs": [
+    { "id": "className",    "type": "promptString", "description": "Class name", "default": "Pilot class" },
+    { "id": "teacherEmail", "type": "promptString", "description": "Teacher e-mail" },
+    { "id": "pseudonym",    "type": "promptString", "description": "Participant pseudonym (e.g. P-9751264F)" }
+  ]
+}

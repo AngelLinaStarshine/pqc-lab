@@ -1,0 +1,19 @@
+{
+  "name": "pqc-lab",
+  "version": "0.5.0",
+  "private": true,
+  "description": "PQC Lab: adaptive ML-KEM lessons with server-side grading and a Java sandbox",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "create-teacher": "node scripts/create-teacher.js",
+    "withdraw": "node scripts/withdraw.js",
+    "test:content": "node scripts/content-test.js"
+  },
+  "engines": { "node": ">=22" },
+  "dependencies": {
+    "cookie-parser": "1.4.7",
+    "express": "4.21.2",
+    "pg": "8.13.1"
+  }
+}
