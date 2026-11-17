@@ -1,0 +1,11 @@
+# Serve the self-contained, in-browser prototype of PQC Lab.
+# The full pilot server (Node + PostgreSQL + Java sandbox) runs via Docker, not on Netlify.
+# Publishing only the prototype folder also keeps server-only files (answer keys, etc.) private.
+[build]
+  publish = "prototype"
+  command = ""
+
+[[redirects]]
+  from = "/"
+  to = "/pqc-lab.html"
+  status = 200
