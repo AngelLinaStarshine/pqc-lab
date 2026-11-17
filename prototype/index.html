@@ -156,6 +156,10 @@ h1,h2,h3,h4{text-wrap:balance;margin:0}
 .tips{font-size:14px;padding-left:18px;color:var(--ink)}
 .terms dt{font-weight:600;margin-top:10px}
 .terms dd{margin:2px 0 0;color:var(--muted);font-size:14px}
+.terms-dialog{max-width:960px}
+.terms-dialog dl.terms{columns:2 360px;column-gap:36px;margin:8px 0 0}
+.terms-dialog .terms dt{break-after:avoid;break-inside:avoid}
+.terms-dialog .terms dd{break-before:avoid;break-inside:avoid;padding-bottom:4px}
 details summary{cursor:pointer;font-weight:600;padding:4px 0}
 
 /* lesson content */
@@ -3254,7 +3258,7 @@ function introTimeHTML(){
 function openTerms(){
   const L = S.lesson;
   const terms = GLOSSARY.filter(g => g.L.includes(L)), others = GLOSSARY.filter(g => !g.L.includes(L));
-  const html = '<div class="dialog drawer" role="dialog" aria-modal="true" aria-labelledby="termsTitle"><h2 id="termsTitle">Key terms</h2>' +
+  const html = '<div class="dialog terms-dialog" role="dialog" aria-modal="true" aria-labelledby="termsTitle"><h2 id="termsTitle">Key terms</h2>' +
     (terms.length ? '<p class="muted">Used in Lesson ' + LESSONS[L].n + '</p><dl class="terms">' + terms.map(g => '<dt>' + esc(g.t) + '</dt><dd>' + esc(g.d) + '</dd>').join('') + '</dl>' : '') +
     '<details><summary>All other terms</summary><dl class="terms">' + others.map(g => '<dt>' + esc(g.t) + '</dt><dd>' + esc(g.d) + '</dd>').join('') + '</dl></details>' +
     '<div class="actions"><button class="btn primary" id="closeOverlay">Close</button></div></div>';
